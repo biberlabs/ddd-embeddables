@@ -7,7 +7,7 @@
  *
  * @since   Sep 2016
  */
-namespace DDD\Embeddable\GeoPoint;
+namespace DDD\Embeddable;
 
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;

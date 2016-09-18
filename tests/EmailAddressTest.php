@@ -16,6 +16,8 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider invalidEmailProvider
      * @expectedException InvalidArgumentException
+     *
+     * @param string $email
      */
     public function testInvalidAddressesAreNotAccepted($email)
     {
@@ -24,6 +26,10 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider validEmailProvider
+     *
+     * @param string $email
+     * @param string $domain
+     * @param string $localPart
      */
     public function testValidAddressesAreAccepted($email, $domain, $localPart)
     {

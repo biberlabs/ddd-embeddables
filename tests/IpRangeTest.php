@@ -9,13 +9,16 @@
  */
 namespace Test\Embeddable;
 
-use DDD\Embeddable\IpAddress;
 use DDD\Embeddable\IpRange;
 
 class IpRangeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider cidrList
+     *
+     * @param string $cidr
+     * @param string $low
+     * @param string $high
      */
     public function testCIDRNotationWorks($cidr, $low, $high)
     {
@@ -30,12 +33,14 @@ class IpRangeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('endIp', $range->toArray());
     }
 
+    /**
+     * @return array
+     */
     public function cidrList()
     {
         return [
             ['176.240.112.0/24', '176.240.112.0', '176.240.112.255'],
             ['10.0.0.0/22', '10.0.0.0', '10.0.3.255'],
-
         ];
     }
 }

@@ -103,7 +103,10 @@ class IpRange implements JsonSerializable
      */
     public function toArray()
     {
-        return $this->jsonSerialize();
+        return [
+            'startIp' => (string) $this->getStartIp(),
+            'endIp'   => (string) $this->getEndIp(),
+        ];
     }
 
     /**
@@ -113,9 +116,6 @@ class IpRange implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return [
-            'startIp' => (string) $this->getStartIp(),
-            'endIp'   => (string) $this->getEndIp(),
-        ];
+        return $this->toArray();
     }
 }

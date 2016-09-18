@@ -15,6 +15,11 @@ class FullnameTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider nameProvider
+     *
+     * @param string $name
+     * @param string $title
+     * @param string $midName
+     * @param string $expected
      */
     public function testFullNameBuilderFlow($name, $title, $midName, $expected)
     {
