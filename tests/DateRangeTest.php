@@ -13,7 +13,6 @@ use DDD\Embeddable\DateRange;
 
 class DateRangeTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testDateRages()
     {
         $start = new \DateTime('31 December 2016');
@@ -24,6 +23,9 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2016-12 - 2017-01', $obj->format('Y-m'));
         $this->assertStringStartsWith('2016-12-31', $obj->format());
         $this->assertEquals(86400, $obj->getDurationInSeconds());
+        $this->assertEquals($obj->toArray(), ['start' => $start, 'end' => $end]);
+        $this->assertEquals($obj->jsonSerialize(), ['start' => $start, 'end' => $end]);
+        $this->assertEquals((string) $obj, $start->format('c') . ' - ' . $end->format('c'));
     }
 
     public function testOlderDateRages()

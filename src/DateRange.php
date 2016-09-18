@@ -39,7 +39,7 @@ class DateRange implements JsonSerializable
      * Constructor
      * 
      * @param \DateTime $start
-     * @param \DateTime $to
+     * @param \DateTime $end
      */
     public function __construct(\DateTime $start, \DateTime $end)
     {
@@ -74,7 +74,7 @@ class DateRange implements JsonSerializable
     /**
      * Formats date range to string using given $format
      * 
-     * @param string $format Any format accepted by php date()
+     * @param string $f Any format accepted by php date()
      * 
      * @return string
      */
@@ -117,7 +117,10 @@ class DateRange implements JsonSerializable
      */
     public function toArray()
     {
-        return $this->jsonSerialize();
+        return [
+            'start' => $this->dateFrom,
+            'end'   => $this->dateTo,
+        ];
     }
 
     /**
@@ -127,9 +130,6 @@ class DateRange implements JsonSerializable
      */
     public function jsonSerialize()
     {
-        return [
-            'start' => $this->dateFrom,
-            'end'   => $this->dateTo,
-        ];
+        return $this->toArray();
     }
 }

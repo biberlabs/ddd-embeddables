@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io
 
+### PHP Storm
+.idea
+
 ### APP Specific ###
 data/coverage/
 

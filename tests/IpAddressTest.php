@@ -23,6 +23,9 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider ipProvider
+     *
+     * @param string $addr
+     * @param string $expected
      */
     public function testValidAddressesAreAccepted($addr, $expected)
     {
