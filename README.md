@@ -1,6 +1,6 @@
 ## DDD Embeddables
 
-[![Build Status](https://secure.travis-ci.org/biberlabs/ddd-embeddables.svg?branch=master)](https://secure.travis-ci.org/biberlabs/ddd-embeddables)
+[![Build Status](https://secure.travis-ci.org/biberlabs/ddd-embeddables.svg?branch=master)](https://secure.travis-ci.org/biberlabs/ddd-embeddables) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
 
 A collection of reusable value objects written in PHP and targeting versions 5.6 and above. Value objects are essential building blocks of **Domain Driven Design** approach and described by Martin Fowler in _P of EAA page 486_ as below:
 
