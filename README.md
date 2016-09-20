@@ -5,8 +5,9 @@
 A collection of reusable value objects written in PHP and targeting versions 5.6 and above. Value objects are essential building blocks of **Domain Driven Design** approach and described by Martin Fowler in _P of EAA page 486_ as below:
 
 
-> Value object is a small simple object, like money or a date range, whose equality isn't based on identity.
-> - Martin Fowler
+> "Value object is a small simple object, like money or a date range, whose equality isn't based on identity."
+
+> &ndash; Martin Fowler
 
 All classes in this library annotated as `ORM\Embeddable` with appropriately adjusted column attributes. This makes them ready to use in any project with Doctrine ORM as [Embeddables](http://doctrine-orm.readthedocs.io/projects/doctrine-orm/en/latest/tutorials/embeddables.html).
 
@@ -45,15 +46,43 @@ class User {
 }
 ```
 
-Afterwards, you can write DQL's based on your requirements something like:
+Afterwards, you can write custom [DQL queries](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html) based on your requirements while accessing properties of the value objects such as:
 
 ```sql
     SELECT u FROM User u WHERE u.email = :email
+    -- OR
+    SELECT p FROM Payments p WHERE p.total.currency = :currency
+    SELECT p FROM Payments p WHERE p.total.amount > 1000
     -- OR
     SELECT u FROM User u WHERE u.name.surname = :surname
     SELECT u FROM User u WHERE u.name.title = :title
 ```
 
+Value objects enables us to write much more cleaner and readable rules when dealing with the domain rules, application-wide. For example:
+
+```php
+   $username  = $user->getEmail()->getLocalpart();
+```
+
+or
+
+```php
+   $blacklist = ['spam4me.io', 'foo.com'];
+   if(in_array($user->getEmail()->getDomain(), $blacklist)) {
+       // ...
+   }
+```
+
+even 
+
+```php
+   if($company->getAddress()->hasMap()) {
+       $latLng = $company->getAddress()->getGeoPoint()->toArray();
+       //..
+   }
+```
+   
+   
 ## Running Tests
 You can run unit tests locally via issuing the command below:
 
