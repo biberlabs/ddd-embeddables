@@ -80,8 +80,23 @@ even
        $latLng = $company->getAddress()->getGeoPoint()->toArray();
        //..
    }
+
+   class Company
+   {
+       // ...
+       
+       /**
+        * Returns a boolean TRUE if the geo location of the company is known,
+        * FALSE otherwise.
+        *
+        * @return bool
+        */
+       public function hasMap()
+       {
+           return $this->getAddres()->getGeoPoint() !== null;
+       }
+   }
 ```
-   
    
 ## Running Tests
 You can run unit tests locally via issuing the command below:
