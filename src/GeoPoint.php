@@ -18,7 +18,7 @@ use JsonSerializable;
 class GeoPoint implements JsonSerializable
 {
     /**
-     * geo point value, stored as assoc array
+     * geo point value, stored as associative array
      *
      * @ORM\Column(type="array", nullable=true)
      * 
@@ -35,7 +35,7 @@ class GeoPoint implements JsonSerializable
     public function __construct($lat, $lng)
     {
         if ($lat < -90.0 || $lat > 90.0 || $lng < -180.0 || $lng > 180.0) {
-            throw new \InvalidArgumentException('Given lat/lng pair is invalid.');
+            throw new \InvalidArgumentException('Given latitude longitude pair is invalid.');
         }
         
         $this->point = [
