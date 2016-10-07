@@ -119,6 +119,22 @@ class Color implements JsonSerializable
     }
 
     /**
+     * Creates a new Color instance from r,g,b values.
+     * 
+     * @param  int $r Red
+     * @param  int $g Green
+     * @param  int $b Blue
+     * 
+     * @return self
+     */
+    public static function fromRGB($r,$g,$b)
+    {
+        $hex = dechex($r).dechex($g).dechex($b);
+
+        return new self($hex);
+    }
+
+    /**
      * String representation of the color, an uppercased hex value.
      * 
      * @return string Example: #FFCC60

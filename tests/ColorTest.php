@@ -40,6 +40,12 @@ class ColorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($color->jsonSerialize(), $color->toArray());
     }
 
+    public function testFactory() 
+    {
+        $color = Color::fromRGB(255,255,255);
+        $this->assertEquals('#FFFFFF', $color->toHex());
+    }
+
     /**
      * @dataProvider sampleColorNames
      */
