@@ -32,30 +32,24 @@ class GeoPoint implements JsonSerializable
      * @param float $lat Latitude
      * @param float $lng Longitude
      */
-    public function __construct($lat, $lng)
+    public function __construct($lat = 0, $lng = 0)
     {
         if ($lat < -90.0 || $lat > 90.0 || $lng < -180.0 || $lng > 180.0) {
             throw new \InvalidArgumentException('Given latitude longitude pair is invalid.');
         }
-        
-        $this->point = [
-            'lat' => (float) $lat,
-            'lng' => (float) $lng,
-        ];
-    }
 
-    /**
-     * Gets the geo point value.
-     *
-     * @return array
-     */
-    public function getPoint()
-    {
-        return $this->point;
+        if ($lat && $lng) {
+            $this->point = [
+                'lat' => (float) $lat,
+                'lng' => (float) $lng,
+            ];
+        }
     }
 
     /**
      * return elasticsearch-friendly geo point format.
+     *
+     * Beware: Elastic uses lat/lon as keys. Google uses lat/lng.
      * 
      * @return array
      */
@@ -65,8 +59,6 @@ class GeoPoint implements JsonSerializable
             return null;
         }
 
-        // Beware:
-        // Elastic uses lat/lon as keys. Google uses lat/lng.
         return [
             'lat' => $this->point['lat'],
             'lon' => $this->point['lng'],
@@ -80,7 +72,7 @@ class GeoPoint implements JsonSerializable
      */
     public function toArray()
     {
-        return $this->point;
+        return $this->point ?: [];
     }
 
     /**
@@ -101,7 +93,7 @@ class GeoPoint implements JsonSerializable
     public function __toString()
     {
         if (empty($this->point)) {
-            return;
+            return '';
         }
 
         return $this->point['lat'].' '.$this->point['lng'];
