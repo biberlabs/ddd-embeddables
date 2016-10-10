@@ -1,6 +1,8 @@
 ## DDD Embeddables
 
-[![Build Status](https://secure.travis-ci.org/biberlabs/ddd-embeddables.svg?branch=master)](https://secure.travis-ci.org/biberlabs/ddd-embeddables) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/coverage.png?b=master&rand=123)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
+[![Build Status](https://secure.travis-ci.org/biberlabs/ddd-embeddables.svg?branch=master)](https://secure.travis-ci.org/biberlabs/ddd-embeddables)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/coverage.png?b=master&rand=123)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
 
 A collection of reusable value objects written in PHP and targeting versions 5.6 and above. Value objects are essential building blocks of **Domain Driven Design** approach and described by Martin Fowler in _P of EAA page 486_ as below:
 
@@ -14,8 +16,8 @@ All classes in this library annotated as `ORM\Embeddable` with appropriately adj
 ## Installation & Usage
 Install the library using [composer](https://getcomposer.org).
 
-```
- $ composer require biberlabs/ddd-embeddables
+```bash
+$ composer require biberlabs/ddd-embeddables
 ```
 
 and use it in your entities:
@@ -49,59 +51,59 @@ class User {
 Afterwards, you can write custom [DQL queries](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html) based on your requirements while accessing properties of the value objects such as:
 
 ```sql
-    SELECT u FROM User u WHERE u.email = :email
-    -- OR
-    SELECT p FROM Payments p WHERE p.total.currency = :currency
-    SELECT p FROM Payments p WHERE p.total.amount > 1000
-    -- OR
-    SELECT u FROM User u WHERE u.name.surname = :surname
-    SELECT u FROM User u WHERE u.name.title = :title
+SELECT u FROM User u WHERE u.email = :email
+-- OR
+SELECT p FROM Payments p WHERE p.total.currency = :currency
+SELECT p FROM Payments p WHERE p.total.amount > 1000
+-- OR
+SELECT u FROM User u WHERE u.name.surname = :surname
+SELECT u FROM User u WHERE u.name.title = :title
 ```
 
 Value objects enables us to write much more cleaner and readable rules when dealing with the domain rules, application-wide. For example:
 
 ```php
-   $username  = $user->getEmail()->getLocalpart();
+$username  = $user->getEmail()->getLocalpart();
 ```
 
 or
 
 ```php
-   $blacklist = ['spam4me.io', 'foo.com'];
-   if(in_array($user->getEmail()->getDomain(), $blacklist)) {
-       // ...
-   }
+$blacklist = ['spam4me.io', 'foo.com'];
+if(in_array($user->getEmail()->getDomain(), $blacklist)) {
+   // ...
+}
 ```
 
 even 
 
 ```php
-   if($company->getAddress()->hasMap()) {
-       $latLng = $company->getAddress()->getGeoPoint()->toArray();
-       //..
-   }
+if($company->getAddress()->hasMap()) {
+    $latLng = $company->getAddress()->getGeoPoint()->toArray();
+    //..
+}
 
-   class Company
-   {
-       // ...
+class Company
+{
+    // ...
        
-       /**
-        * Returns a boolean TRUE if the geo location of the company is known,
-        * FALSE otherwise.
-        *
-        * @return bool
-        */
-       public function hasMap()
-       {
-           return $this->getAddres()->getGeoPoint() !== null;
-       }
-   }
+    /**
+     * Returns a boolean TRUE if the geo location of the company is known,
+     * FALSE otherwise.
+     *
+     * @return bool
+     */
+    public function hasMap()
+    {
+        return $this->getAddres()->getGeoPoint() !== null;
+    }
+}
 ```
    
 ## Running Tests
 You can run unit tests locally via issuing the command below:
 
-```
+```bash
 $ composer test
 ```
 
