@@ -6,7 +6,6 @@
 
 A collection of reusable value objects written in PHP and targeting versions 5.6 and above. Value objects are essential building blocks of **Domain Driven Design** approach and described by Martin Fowler in _P of EAA page 486_ as below:
 
-
 > "Value object is a small simple object, like money or a date range, whose equality isn't based on identity."
 
 > &ndash; Martin Fowler
@@ -78,7 +77,7 @@ if(in_array($user->getEmail()->getDomain(), $blacklist)) {
 even 
 
 ```php
-if($company->getAddress()->hasMap()) {
+if($company->hasMap()) {
     $latLng = $company->getAddress()->getGeoPoint()->toArray();
     //..
 }
@@ -88,14 +87,14 @@ class Company
     // ...
        
     /**
-     * Returns a boolean TRUE if the geo location of the company is known,
+     * Returns a boolean TRUE if the geolocation of the company is known,
      * FALSE otherwise.
      *
      * @return bool
      */
     public function hasMap()
     {
-        return $this->getAddres()->getGeoPoint() !== null;
+        return $this->getAddress()->getGeoPoint() !== null;
     }
 }
 ```
