@@ -124,7 +124,7 @@ If you want to contribute to **ddd-embeddables** and make it better, your help i
 Please take a look our [CONTRIBUTING.md](CONTRIBUTING.md) before creating a pull request.
 
 ## Further Reading
-Do you interested in Domain Driven Design? Here a some list of good resources to dig in-depth.
+Are you interested in Domain Driven Design? Here is a list of good resources to dig in-depth.
 
  - [Value Objects](http://martinfowler.com/bliki/ValueObject.html) - Martin Fowler
  - [Separating Concerns using Embeddables](http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html) - Doctrine ORM documentation
