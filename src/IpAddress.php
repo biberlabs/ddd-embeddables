@@ -36,8 +36,12 @@ class IpAddress
      *
      * @param string $addr IP address.
      */
-    public function __construct($addr)
+    public function __construct($addr = null)
     {
+        if (!$addr) {
+            return; // early..
+        }
+
         $filtered = filter_var($addr, FILTER_VALIDATE_IP);
         if ($filtered === false) {
             throw new \InvalidArgumentException('Given IP '.$addr.' is not a valid IP address');
@@ -53,6 +57,6 @@ class IpAddress
      */
     public function __toString()
     {
-        return $this->address;
+        return $this->address ?: '';
     }
 }

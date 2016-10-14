@@ -34,16 +34,25 @@ class ColorTest extends \PHPUnit_Framework_TestCase
     public function testRGBConversionWorks()
     {
         $color = new Color('FFF');
-        $this->assertEquals([255,255,255], $color->toRGB());
+        $this->assertEquals([255, 255, 255], $color->toRGB());
         $this->assertEquals('rgb(255,255,255)', $color->toRGBString());
-        $this->assertInstanceof(\JsonSerializable::class, $color);
+        $this->assertInstanceOf(\JsonSerializable::class, $color);
         $this->assertEquals($color->jsonSerialize(), $color->toArray());
     }
 
-    public function testFactory() 
+    public function testFactory()
     {
-        $color = Color::fromRGB(255,255,255);
+        $color = Color::fromRGB(255, 255, 255);
         $this->assertEquals('#FFFFFF', $color->toHex());
+    }
+
+    public function testEmptyState()
+    {
+        $color = new Color();
+        $this->assertInstanceOf(Color::class, $color);
+        $this->assertEquals([], $color->toArray());
+        $this->assertEquals([], $color->toRGB());
+        $this->assertEquals('', (string) $color);
     }
 
     /**
@@ -52,7 +61,7 @@ class ColorTest extends \PHPUnit_Framework_TestCase
     public function testSerializedColorHasAName($hex, $name)
     {
         $color = new Color($hex);
-        $arr = $color->toArray();
+        $arr   = $color->toArray();
         $this->assertEquals($arr['name'], $name);
     }
 

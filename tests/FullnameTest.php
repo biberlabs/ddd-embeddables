@@ -50,6 +50,13 @@ class FullnameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, json_encode($obj2));
     }
 
+    public function testEmptyState()
+    {
+        $name = new Fullname();
+        $this->assertInstanceOf(Fullname::class, $name);
+        $this->assertEquals('', (string) $name);
+    }
+
     /**
      * @return array
      */

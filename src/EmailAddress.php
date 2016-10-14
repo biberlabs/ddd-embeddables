@@ -30,11 +30,11 @@ class EmailAddress
      * 
      * @param string $email E-mail address
      */
-    public function __construct($email)
+    public function __construct($email = null)
     {
-        // This is only a soft validation.
+        // This is only a soft validation to reduce headaches in
         // You SHOULD sanitize & validate email before using it as a value object!
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('Given e-mail address '.$email.' is not a valid');
         }
 
@@ -58,7 +58,7 @@ class EmailAddress
      */
     public function getDomain()
     {
-        return explode('@', $this->address)[1];
+        return $this->address ? explode('@', $this->address)[1] : null;
     }
 
     /**
@@ -68,6 +68,6 @@ class EmailAddress
      */
     public function getLocalPart()
     {
-        return explode('@', $this->address)[0];
+        return $this->address ? explode('@', $this->address)[0] : null;
     }
 }
