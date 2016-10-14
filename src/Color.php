@@ -32,7 +32,7 @@ class Color implements JsonSerializable
      *
      * @ORM\Column(type="string", length=6, nullable=true)
      * 
-     * @var array
+     * @var string
      */
     private $color;
 
@@ -43,8 +43,12 @@ class Color implements JsonSerializable
      * 
      * @param string $hex
      */
-    public function __construct($hex)
+    public function __construct($hex = null)
     {
+        if ($hex === null) {
+            return;
+        }
+        
         $hex = $this->normalize($hex);
 
         if (!$this->isValidHex($hex)) {
@@ -61,16 +65,20 @@ class Color implements JsonSerializable
      */
     public function toHex()
     {
-        return '#'.$this->color;
+        return ($this->color) ? '#'.$this->color : '';
     }
 
     /**
-     * Returns the color in RGB format
+     * Returns the color in RGB format, empty array if color is not set.
      *
      * @return array
      */
     public function toRGB()
     {
+        if ($this->isEmpty()) {
+            return [];
+        }
+
         list($r, $g, $b) = sscanf($this->color, "%02x%02x%02x");
 
         return [ $r, $g, $b ];
@@ -115,6 +123,10 @@ class Color implements JsonSerializable
      */
     public function toArray()
     {
+        if ($this->isEmpty()) {
+            return [];
+        }
+        
         $rgb = $this->toRGB();
 
         return [
@@ -158,6 +170,16 @@ class Color implements JsonSerializable
     public function __toString()
     {
         return $this->toHex();
+    }
+
+    /**
+     * Returns a boolean TRUE if color is literally empty
+     * 
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return empty($this->color);
     }
 
     /**

@@ -33,6 +33,14 @@ class IpRangeTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('endIp', $range->toArray());
     }
 
+    public function testStringRepresentationAndEmptyState()
+    {
+        $range = new IpRange();
+        $this->assertInstanceOf(IpRange::class, $range);
+        $this->assertEquals([], $range->toArray());
+        $this->assertEquals('', (string) $range);
+    }
+
     /**
      * @return array
      */

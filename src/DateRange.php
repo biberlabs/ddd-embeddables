@@ -41,9 +41,11 @@ class DateRange implements JsonSerializable
      * @param \DateTime $start
      * @param \DateTime $end
      */
-    public function __construct(\DateTime $start, \DateTime $end)
+    public function __construct(\DateTime $start = null, \DateTime $end = null)
     {
-        if ($start >= $end) {
+        if ($start === null || $end === null) {
+            return;
+        } elseif ($start >= $end) {
             throw new \InvalidArgumentException('Start date is greater or equal to end date');
         }
         
@@ -80,6 +82,10 @@ class DateRange implements JsonSerializable
      */
     public function format($f = 'c')
     {
+        if ($this->isEmpty()) {
+            return '';
+        }
+
         return $this->getDateFrom()->format($f).' - '.$this->getDateTo()->format($f);
     }
 
@@ -90,7 +96,7 @@ class DateRange implements JsonSerializable
      */
     public function __toString()
     {
-        return $this->getDateFrom()->format('c').' - '.$this->getDateTo()->format('c');
+        return $this->format('c');
     }
 
     /**
@@ -100,6 +106,10 @@ class DateRange implements JsonSerializable
      */
     public function getDurationInSeconds()
     {
+        if (!$this->dateFrom) {
+            return 0;
+        }
+
         $interval = $this->dateFrom->diff($this->dateTo);
 
         return ($interval->y * 365 * 24 * 60 * 60) +
@@ -115,11 +125,15 @@ class DateRange implements JsonSerializable
      * 
      * @return array
      */
-    public function toArray()
+    public function toArray($format = 'c')
     {
+        if ($this->isEmpty()) {
+            return [];
+        }
+
         return [
-            'start' => $this->dateFrom,
-            'end'   => $this->dateTo,
+            'start' => $this->getDateFrom()->format($format),
+            'end'   => $this->getDateTo()->format($format),
         ];
     }
 
@@ -131,5 +145,16 @@ class DateRange implements JsonSerializable
     public function jsonSerialize()
     {
         return $this->toArray();
+    }
+
+    /**
+     * Returns a boolean TRUE if the range instance is
+     * literally empty, FALSE otherwise.
+     * 
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return !$this->dateFrom || !$this->dateTo;
     }
 }

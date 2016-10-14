@@ -39,6 +39,12 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($localPart, $obj->getLocalPart());
     }
 
+    public function testEmptyState()
+    {
+        $addr = new EmailAddress();
+        $this->assertInstanceOf(EmailAddress::class, $addr);
+    }
+
     public function invalidEmailProvider()
     {
         return [
