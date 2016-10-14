@@ -4,3 +4,5 @@ Please feel free to create a new issue about any problem(s) you saw. We love pul
  - Follow the PSR-1 and PSR-2 standards, **always**.
  - Write a [good commit message](https://gist.github.com/matthewhudson/1475276).
  - Write unit tests.
+
+Please use `develop` branch to send pull request. Don't send any pull request directly `master`.
