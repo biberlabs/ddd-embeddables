@@ -32,13 +32,13 @@ class GeoPoint implements JsonSerializable
      * @param float $lat Latitude
      * @param float $lng Longitude
      */
-    public function __construct($lat = 0, $lng = 0)
+    public function __construct($lat = null, $lng = null)
     {
-        if ($lat < -90.0 || $lat > 90.0 || $lng < -180.0 || $lng > 180.0) {
-            throw new \InvalidArgumentException('Given latitude longitude pair is invalid.');
-        }
-
         if ($lat && $lng) {
+            if ($lat < -90.0 || $lat > 90.0 || $lng < -180.0 || $lng > 180.0) {
+                throw new \InvalidArgumentException('Given latitude longitude pair is invalid.');
+            }
+
             $this->point = [
                 'lat' => (float) $lat,
                 'lng' => (float) $lng,
@@ -56,7 +56,7 @@ class GeoPoint implements JsonSerializable
     public function toElastic()
     {
         if (empty($this->point)) {
-            return null;
+            return [];
         }
 
         return [

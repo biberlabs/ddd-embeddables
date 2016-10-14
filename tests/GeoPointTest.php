@@ -29,6 +29,14 @@ class GeoPointTest extends \PHPUnit_Framework_TestCase
         $geoPoint = new GeoPoint(-300, 300);
     }
 
+    public function testEmptyState()
+    {
+        $p = new GeoPoint();
+        $this->assertInstanceOf(GeoPoint::class, $p);
+        $this->assertEquals([], $p->toArray());
+        $this->assertEquals([], $p->toElastic());
+    }
+
     public function testStringRepresentationAndEmptyState()
     {
         $point = new GeoPoint(41.520112, 29.453401);

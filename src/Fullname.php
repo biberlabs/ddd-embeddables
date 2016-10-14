@@ -90,9 +90,11 @@ class Fullname implements JsonSerializable
      * @param string $fullname Space separated full name. Ex: Steven Paul Jobs
      * @param string $title
      */
-    public function __construct($fullname, $title = null)
+    public function __construct($fullname = null, $title = null)
     {
-        $this->buildFromString($fullname);
+        if($fullname) {
+            $this->buildFromString($fullname);
+        }
 
         if ($title) {
             $this->setTitle($title);

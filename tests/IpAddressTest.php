@@ -33,6 +33,13 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, (string) $obj);
     }
 
+    public function testEmptyState()
+    {
+        $obj = new IpAddress();
+        $this->assertInstanceOf(IpAddress::class, $obj);
+        $this->assertSame('', (string) $obj);
+    }
+
     /**
      * ip data provider
      * 

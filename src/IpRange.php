@@ -44,7 +44,7 @@ class IpRange implements JsonSerializable
      * @param IpAddress $startIp
      * @param IpAddress $endIp
      */
-    public function __construct(IpAddress $startIp, IpAddress $endIp)
+    public function __construct(IpAddress $startIp = null, IpAddress $endIp = null)
     {
         $this->startIp = $startIp;
         $this->endIp   = $endIp;
@@ -90,10 +90,16 @@ class IpRange implements JsonSerializable
         return new IpRange(new IpAddress($start), new IpAddress($end));
     }
 
-    // Cast the range to a CIDR notation
+    /**
+     * String representation of a range.
+     * 
+     * Example output: "192.168.0.10 - 192.168.0.255"
+     *    
+     * @return string
+     */
     public function __toString()
     {
-        // TBD
+        return $this->isEmpty() ? '' : (string) $this->startIp.' - '. $this->endIp;
     }
 
     /**
@@ -103,10 +109,24 @@ class IpRange implements JsonSerializable
      */
     public function toArray()
     {
+        if ($this->isEmpty()) {
+            return [];
+        }
+
         return [
             'startIp' => (string) $this->getStartIp(),
             'endIp'   => (string) $this->getEndIp(),
         ];
+    }
+
+    /**
+     * Returns boolean TRUE if the range is empty, false otherwise.
+     * 
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return $this->startIp === null || $this->endIp === null;
     }
 
     /**
