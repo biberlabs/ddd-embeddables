@@ -1,4 +1,6 @@
-## DDD Embeddables
+# DDD Embeddables
+
+----
 
 [![Build Status](https://secure.travis-ci.org/biberlabs/ddd-embeddables.svg?branch=master)](https://secure.travis-ci.org/biberlabs/ddd-embeddables)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
