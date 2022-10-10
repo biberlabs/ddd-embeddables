@@ -1,32 +1,34 @@
 <?php
 /**
- * Fullname value object to represents a person's name 
- * including title, firstname, middlename and lastname.
- * 
+ * Fullname value object to represent a person's name
+ * including title, firstname, middle name and lastname.
+ *
  * @author  M. Yilmaz SUSLU <yilmazsuslu@gmail.com>
  * @license MIT
  *
  * @since   Sep 2016
  */
+
 namespace DDD\Embeddable;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use JsonSerializable;
 
 /**
  * @ORM\Embeddable
  */
-class Fullname implements JsonSerializable
+class FullName implements JsonSerializable
 {
     /**
-     * Simple honorific title enumaration.
-     * 
+     * Simple honorific title enumeration.
+     *
      * It mainly helps keeping titles consistent and easily validating them.
-     * Also very useful to populate title dropdowns.
+     * Also, very useful to populate title dropdowns.
      */
-    const TITLES = [
+    public const TITLES = [
         'Mr.',
-        'Ms.',   // address for women regardless of their marital status
+        'Ms.',   // for women regardless of their marital status
         'Mrs.',
         'Miss',
         'Mx.',   // a title that does not indicate gender
@@ -38,62 +40,48 @@ class Fullname implements JsonSerializable
 
     /**
      * honorific title prefixing a person's name.
-     * 
+     *
      * @ORM\Column(type="string", length=5, nullable=true)
-     * 
-     * @var string
      */
-    private $title;
+    private ?string $title = null;
 
     /**
      * first name of the person.
-     * 
+     *
      * @ORM\Column(type="string", length=64, nullable=true)
-     * 
-     * @var string
      */
-    private $name;
+    private ?string $name = null;
 
     /**
      * middle name of the person.
      *
      * @ORM\Column(type="string", length=64, nullable=true)
-     * 
-     * @var string
      */
-    private $middleName;
+    private ?string $middleName = null;
 
     /**
      * last name of the person.
      *
      * @ORM\Column(type="string", length=64, nullable=true)
-     * 
-     * @var string
      */
-    private $surname;
+    private ?string $surname = null;
 
     /**
      * String representation of a full name.
-     * 
-     * @return string
      */
     public function __toString()
     {
-        $result = [$this->title, $this->name, $this->middleName, $this->surname];
         // Array filter removes empty items.
-        return implode(' ', array_filter($result));
+        return implode(' ', array_filter([$this->title, $this->name, $this->middleName, $this->surname]));
     }
 
     /**
-     * Constructor.
-     * 
-     * @param string $fullname Space separated full name. Ex: Steven Paul Jobs
-     * @param string $title
+     * @param string|null $fullName Space separated full name. Ex: Steven Paul Jobs
      */
-    public function __construct($fullname = null, $title = null)
+    public function __construct(string $fullName = null, string $title = null)
     {
-        if($fullname) {
-            $this->buildFromString($fullname);
+        if ($fullName) {
+            $this->buildFromString($fullName);
         }
 
         if ($title) {
@@ -103,20 +91,18 @@ class Fullname implements JsonSerializable
 
     /**
      * A private setter for title.
-     * 
-     * @throws \InvalidArgumentException
-     * 
-     * @param string $title
+     *
+     * @throws InvalidArgumentException
      */
-    private function setTitle($title)
+    private function setTitle(string $title) : void
     {
-        if (substr($title, -1) !== '.') {
+        if (! str_ends_with($title, '.')) {
             // Allow titles without dots too
-            $title = $title.'.';
+            $title .= '.';
         }
 
-        if (!in_array($title, self::TITLES)) {
-            throw new \InvalidArgumentException('Given title is invalid: '.$title);
+        if (! in_array($title, self::TITLES)) {
+            throw new InvalidArgumentException('Given title is invalid: ' . $title);
         }
 
         $this->title = $title;
@@ -124,14 +110,10 @@ class Fullname implements JsonSerializable
 
     /**
      * Set name, surname and last fields using.
-     * 
-     * @param string $fullname
-     *
-     * @return self
      */
-    private function buildFromString($fullname)
+    private function buildFromString(string $fullName) : void
     {
-        $names = array_filter(explode(' ', $fullname)); // explode from spaces
+        $names = array_filter(explode(' ', $fullName)); // explode from spaces
         $i     = 1;
         $total = count($names);
 
@@ -144,77 +126,63 @@ class Fullname implements JsonSerializable
                     $this->surname = $word;
                 } else {
                     // merge all middle names
-                    $this->middleName = trim($this->middleName.' '.$word);
+                    $this->middleName = trim($this->middleName . ' ' . $word);
                 }
             }
 
             ++$i;
         }
-
-        return $this;
     }
 
     /**
      * Gets the honorific title prefixing person's name.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle() : ?string
     {
         return $this->title;
     }
 
     /**
      * Gets the first name of the person.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName() : ?string
     {
         return $this->name;
     }
 
     /**
      * Gets the middle name of the person.
-     *
-     * @return string
      */
-    public function getMiddleName()
+    public function getMiddleName() : ?string
     {
         return $this->middleName;
     }
 
     /**
      * Gets the last name of the person.
-     *
-     * @return string
      */
-    public function getSurname()
+    public function getSurname() : ?string
     {
         return $this->surname;
     }
 
     /**
      * Returns array representation of the full name.
-     * 
-     * @return array
      */
-    public function toArray()
+    public function toArray() : array
     {
         return [
-            'title'      => $this->title,
-            'name'       => $this->name,
+            'title' => $this->title,
+            'name' => $this->name,
             'middleName' => $this->middleName,
-            'surname'    => $this->surname,
+            'surname' => $this->surname,
         ];
     }
 
     /**
      * Returns array representation of the full name.
-     * 
-     * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->toArray();
     }

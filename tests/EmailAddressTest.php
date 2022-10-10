@@ -10,46 +10,50 @@
 namespace Test\Embeddable;
 
 use DDD\Embeddable\EmailAddress;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
-class EmailAddressTest extends \PHPUnit_Framework_TestCase
+class EmailAddressTest extends TestCase
 {
     /**
      * @dataProvider invalidEmailProvider
-     * @expectedException InvalidArgumentException
-     *
-     * @param string $email
      */
-    public function testInvalidAddressesAreNotAccepted($email)
+    public function testInvalidAddressesAreNotAccepted(string $email) : void
     {
-        $addr = new EmailAddress($email);
+        $this->expectException(InvalidArgumentException::class);
+        new EmailAddress($email);
     }
 
     /**
      * @dataProvider validEmailProvider
-     *
-     * @param string $email
-     * @param string $domain
-     * @param string $localPart
      */
-    public function testValidAddressesAreAccepted($email, $domain, $localPart)
+    public function testValidAddressesAreAccepted(string $email, string $expectedDomain, string $expectedLocalPart) : void
     {
-        $obj = new EmailAddress($email);
-        $this->assertEquals($email, (string) $obj);
-        $this->assertEquals($domain, $obj->getDomain());
-        $this->assertEquals($localPart, $obj->getLocalPart());
+        // Given
+        $underTest = new EmailAddress($email);
+
+        // When Then
+        $this->assertSame($email, (string) $underTest);
+        $this->assertSame($expectedDomain, $underTest->getDomain());
+        $this->assertSame($expectedLocalPart, $underTest->getLocalPart());
     }
 
-    public function testEmptyState()
+    public function testEmptyState() : void
     {
-        $addr = new EmailAddress();
-        $this->assertInstanceOf(EmailAddress::class, $addr);
+        // Given
+        $underTest = new EmailAddress();
+
+        // When Then
+        $this->assertInstanceOf(EmailAddress::class, $underTest);
+        $this->assertNull($underTest->getDomain());
+        $this->assertNull($underTest->getLocalPart());
     }
 
-    public function invalidEmailProvider()
+    private function invalidEmailProvider() : array
     {
         return [
             ['fake-email'],
-            ['fakemail@'],
+            ['fake-mail@'],
             ['w@fake mail.com'],
             ['v@for.vendetta/com'],
             ['!?#- 1*@bad.c0m'],
@@ -61,7 +65,7 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function validEmailProvider()
+    private function validEmailProvider() : array
     {
         return [
             ['devil@hell.travel', 'hell.travel', 'devil'],
@@ -69,7 +73,7 @@ class EmailAddressTest extends \PHPUnit_Framework_TestCase
             ['cool@mail.com', 'mail.com', 'cool'],
             ['great@mail.co.uk', 'mail.co.uk', 'great'],
             ['good@email.address.com', 'email.address.com', 'good'],
-            ['sogood@sub.domain.com.br', 'sub.domain.com.br', 'sogood'],
+            ['so-good@sub.domain.com.br', 'sub.domain.com.br', 'so-good'],
             ['a1@b2.eu', 'b2.eu', 'a1'],
         ];
     }

@@ -10,6 +10,7 @@
 namespace DDD\Embeddable;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use JsonSerializable;
 
 /**
@@ -20,28 +21,20 @@ class GeoPoint implements JsonSerializable
     /**
      * geo point value, stored as associative array
      *
-     * @ORM\Column(type="array", nullable=true)
-     * 
-     * @var array
+     * @ORM\Column(type="json", nullable=true)
      */
-    private $point;
+    private array $point = [];
 
-    /**
-     * Constructor
-     *
-     * @param float $lat Latitude
-     * @param float $lng Longitude
-     */
-    public function __construct($lat = null, $lng = null)
+    public function __construct(float $latitude = null, float $longitude = null)
     {
-        if ($lat && $lng) {
-            if ($lat < -90.0 || $lat > 90.0 || $lng < -180.0 || $lng > 180.0) {
-                throw new \InvalidArgumentException('Given latitude longitude pair is invalid.');
+        if ($latitude && $longitude) {
+            if ($latitude < -90.0 || $latitude > 90.0 || $longitude < -180.0 || $longitude > 180.0) {
+                throw new InvalidArgumentException('Given latitude longitude pair is invalid.');
             }
 
             $this->point = [
-                'lat' => (float) $lat,
-                'lng' => (float) $lng,
+                'lat' => $latitude,
+                'lng' => $longitude,
             ];
         }
     }
@@ -50,10 +43,8 @@ class GeoPoint implements JsonSerializable
      * return elasticsearch-friendly geo point format.
      *
      * Beware: Elastic uses lat/lon as keys. Google uses lat/lng.
-     * 
-     * @return array
      */
-    public function toElastic()
+    public function toElastic() : array
     {
         if (empty($this->point)) {
             return [];
@@ -67,30 +58,24 @@ class GeoPoint implements JsonSerializable
 
     /**
      * Array representation of the geo point
-     * 
-     * @return array
      */
-    public function toArray()
+    public function toArray() : array
     {
-        return $this->point ?: [];
+        return $this->point;
     }
 
     /**
      * Implement json serializable interface.
-     * 
-     * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->toArray();
     }
 
     /**
      * String representation of the point, lat lng order, separated by a space.
-     * 
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         if (empty($this->point)) {
             return '';

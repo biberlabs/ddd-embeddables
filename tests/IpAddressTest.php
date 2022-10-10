@@ -1,51 +1,43 @@
 <?php
 /**
  * Unit tests for IpAddress value object.
- * 
+ *
  * @author  M. Yilmaz SUSLU <yilmazsuslu@gmail.com>
  * @license MIT
  *
  * @since   Sep 2016
  */
+
 namespace Test\Embeddable;
 
 use DDD\Embeddable\IpAddress;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
-class IpAddressTest extends \PHPUnit_Framework_TestCase
+class IpAddressTest extends TestCase
 {
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testInvalidAddressesAreNotAccepted()
+    public function testInvalidAddressesAreNotAccepted() : void
     {
-        $addr = new IpAddress('0.0.0');
+        $this->expectException(InvalidArgumentException::class);
+        new IpAddress('0.0.0');
     }
 
     /**
      * @dataProvider ipProvider
-     *
-     * @param string $addr
-     * @param string $expected
      */
-    public function testValidAddressesAreAccepted($addr, $expected)
+    public function testValidAddressesAreAccepted(string $addr, string $expected) : void
     {
-        $obj = new IpAddress($addr);
-        $this->assertEquals($expected, (string) $obj);
+        $underTest = new IpAddress($addr);
+        $this->assertSame($expected, (string)$underTest);
     }
 
-    public function testEmptyState()
+    public function testEmptyState() : void
     {
-        $obj = new IpAddress();
-        $this->assertInstanceOf(IpAddress::class, $obj);
-        $this->assertSame('', (string) $obj);
+        $underTest = new IpAddress();
+        $this->assertSame('', (string)$underTest);
     }
 
-    /**
-     * ip data provider
-     * 
-     * @return array
-     */
-    public function ipProvider()
+    private function ipProvider() : array
     {
         return [
             ['127.0.0.1', '127.0.0.1'],

@@ -6,7 +6,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/badges/coverage.png?b=master&rand=123)](https://scrutinizer-ci.com/g/biberlabs/ddd-embeddables/?branch=master)
 
-A collection of reusable value objects written in PHP and targeting versions 5.6 and above. Value objects are essential building blocks of **Domain Driven Design** approach and described by Martin Fowler in _P of EAA page 486_ as below:
+A collection of reusable value objects written in PHP and targeting versions 8.0 and above. Value objects are essential building blocks of **Domain Driven Design** approach and described by Martin Fowler in _P of EAA page 486_ as below:
 
 > "Value object is a small simple object, like money or a date range, whose equality isn't based on identity."
 
@@ -111,13 +111,14 @@ $ composer test
 Please make sure that all test are green before creating a PR.
 
 ```
-PHPUnit 5.1.6 by Sebastian Bergmann and contributors.
+PHPUnit 9.5.25 #StandWithUkraine
 
-...........                 11 / 11 (100%)
+................................................................. 65 / 75 ( 86%)
+..........                                                        75 / 75 (100%)
 
-Time: 269 ms, Memory: 7.25Mb
+Time: 00:00.037, Memory: 6.00 MB
 
-OK (39 tests, 71 assertions)
+OK (75 tests, 124 assertions)
 ```
 
 ## Contributing

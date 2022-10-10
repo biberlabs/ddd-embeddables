@@ -1,53 +1,60 @@
 <?php
 /**
  * Unit tests for IpAddress value object.
- * 
+ *
  * @author  M. Yilmaz SUSLU <yilmazsuslu@gmail.com>
  * @license MIT
  *
  * @since   Sep 2016
  */
+
 namespace Test\Embeddable;
 
 use DDD\Embeddable\IpRange;
+use PHPUnit\Framework\TestCase;
 
-class IpRangeTest extends \PHPUnit_Framework_TestCase
+class IpRangeTest extends TestCase
 {
     /**
      * @dataProvider cidrList
-     *
-     * @param string $cidr
-     * @param string $low
-     * @param string $high
      */
-    public function testCIDRNotationWorks($cidr, $low, $high)
+    public function testCIDRNotationWorks(string $cidr, string $expectedLow, string $expectedHigh) : void
     {
-        $range = IpRange::createFromCidrNotation($cidr);
-        $this->assertEquals((string) $range->getStartIp(), $low);
-        $this->assertEquals((string) $range->getEndIp(), $high);
-        $this->assertInstanceOf(IpRange::class, $range);
+        // Given
+        $underTest = IpRange::fromCIDR($cidr);
+        $expected = [
+            'startIp' => $expectedLow,
+            'endIp' => $expectedHigh,
+        ];
 
-        $obj = json_decode(json_encode($range));
-        $this->assertEquals($obj->startIp, (string) $range->getStartIp());
-        $this->assertArrayHasKey('startIp', $range->toArray());
-        $this->assertArrayHasKey('endIp', $range->toArray());
+        // When
+        $actual = $underTest->toArray();
+        $this->assertSame($expected, $actual);
+
+        // Then
+        $this->assertSame($expectedLow, (string)$underTest->getStartIp());
+        $this->assertSame($expectedHigh, (string)$underTest->getEndIp());
     }
 
-    public function testStringRepresentationAndEmptyState()
+    public function testEmptyState() : void
     {
-        $range = new IpRange();
-        $this->assertInstanceOf(IpRange::class, $range);
-        $this->assertEquals([], $range->toArray());
-        $this->assertEquals('', (string) $range);
+        // Given
+        $underTest = new IpRange();
+
+        // When
+        $actual = $underTest->toArray();
+
+        // Then
+        $this->assertSame([], $actual);
+        $this->assertSame('', (string)$underTest);
+        $this->assertTrue($underTest->isEmpty());
     }
 
-    /**
-     * @return array
-     */
-    public function cidrList()
+    private function cidrList() : array
     {
         return [
             ['176.240.112.0/24', '176.240.112.0', '176.240.112.255'],
+            ['176.240.112.0/32', '176.240.112.0', '176.240.112.0'],
             ['10.0.0.0/22', '10.0.0.0', '10.0.3.255'],
         ];
     }

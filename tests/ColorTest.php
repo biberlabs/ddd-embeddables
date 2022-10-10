@@ -1,71 +1,79 @@
 <?php
 /**
  * Unit tests for Color value object.
- * 
+ *
  * @author  M. Yilmaz SUSLU <yilmazsuslu@gmail.com>
  * @license MIT
  *
  * @since   Oct 2016
  */
+
 namespace Test\Embeddable;
 
 use DDD\Embeddable\Color;
+use InvalidArgumentException;
+use JsonSerializable;
+use PHPUnit\Framework\TestCase;
 
-class ColorTest extends \PHPUnit_Framework_TestCase
+class ColorTest extends TestCase
 {
     /**
      * @dataProvider badHexCodes
-     * @expectedException InvalidArgumentException
      */
-    public function testInvalidHexNotAccepted($hex)
+    public function testInvalidHexNotAccepted(mixed $hex) : void
     {
-        $hex = new Color($hex);
+        $this->expectException(InvalidArgumentException::class);
+        new Color($hex);
     }
 
     /**
      * @dataProvider goodHexCodes
      */
-    public function testAlwaysNormalizeHexValues($val, $normalized)
+    public function testAlwaysNormalizeHexValues(string $val, string $normalized) : void
     {
         $color = new Color($val);
-        $this->assertEquals($normalized, (string) $color);
+        $this->assertSame($normalized, (string)$color);
     }
 
-    public function testRGBConversionWorks()
+    public function testRGBConversionWorks() : void
     {
-        $color = new Color('FFF');
-        $this->assertEquals([255, 255, 255], $color->toRGB());
-        $this->assertEquals('rgb(255,255,255)', $color->toRGBString());
-        $this->assertInstanceOf(\JsonSerializable::class, $color);
-        $this->assertEquals($color->jsonSerialize(), $color->toArray());
+        // Given
+        $underTest = new Color('FFF');
+
+        // When then
+        $this->assertSame([255, 255, 255], $underTest->toRGB());
+        $this->assertSame('rgb(255,255,255)', $underTest->toRGBString());
+        $this->assertInstanceOf(JsonSerializable::class, $underTest);
+        $this->assertSame($underTest->jsonSerialize(), $underTest->toArray());
     }
 
-    public function testFactory()
+    public function testFromRgb() : void
     {
-        $color = Color::fromRGB(255, 255, 255);
-        $this->assertEquals('#FFFFFF', $color->toHex());
+        $actual = Color::fromRGB(255, 255, 255)->toHex();
+        $this->assertSame('#FFFFFF', $actual);
     }
 
-    public function testEmptyState()
+    public function testEmptyState() : void
     {
-        $color = new Color();
-        $this->assertInstanceOf(Color::class, $color);
-        $this->assertEquals([], $color->toArray());
-        $this->assertEquals([], $color->toRGB());
-        $this->assertEquals('', (string) $color);
+        // Given
+        $underTest = new Color();
+
+        // When then
+        $this->assertSame([], $underTest->toArray());
+        $this->assertSame([], $underTest->toRGB());
+        $this->assertSame('', (string)$underTest);
     }
 
     /**
      * @dataProvider sampleColorNames
      */
-    public function testSerializedColorHasAName($hex, $name)
+    public function testSerializedColorHasAName(string $hex, string $expectedName) : void
     {
-        $color = new Color($hex);
-        $arr   = $color->toArray();
-        $this->assertEquals($arr['name'], $name);
+        $arr = (new Color($hex))->toArray();
+        $this->assertSame($expectedName, $arr['name']);
     }
 
-    public function goodHexCodes()
+    public function goodHexCodes() : array
     {
         return [
             ['#CCA', '#CCCCAA'],
@@ -79,21 +87,20 @@ class ColorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function badHexCodes()
+    public function badHexCodes() : array
     {
         return [
             ['#FFFA'],
             ['#CACAC'],
             ['TXDFA8'],
             ['#TXDFA8'],
-            [false],
             [-1],
             ['rgb(1,2,3)'],
             ['Hello'],
         ];
     }
 
-    public function sampleColorNames()
+    public function sampleColorNames() : array
     {
         return [
             ['CCCCCC', 'Pastel Gray'],

@@ -70,3 +70,6 @@ composer.phar
 
 ### Git ###
 *.orig
+
+### PHPUnit ###
+.phpunit.*

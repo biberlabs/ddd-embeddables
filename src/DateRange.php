@@ -9,7 +9,9 @@
  */
 namespace DDD\Embeddable;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use JsonSerializable;
 
 /**
@@ -21,54 +23,36 @@ class DateRange implements JsonSerializable
      * start date
      * 
      * @ORM\Column(type="datetime", nullable=true)
-     * 
-     * @var \DateTime
      */
-    private $dateFrom;
+    private ?DateTime $dateFrom = null;
 
     /**
      * end date
      *
      * @ORM\Column(type="datetime", nullable=true)
-     *
-     * @var \DateTime
      */
-    private $dateTo;
+    private ?DateTime $dateTo = null;
 
-    /**
-     * Constructor
-     * 
-     * @param \DateTime $start
-     * @param \DateTime $end
-     */
-    public function __construct(\DateTime $start = null, \DateTime $end = null)
+    public function __construct(DateTime $start = null, DateTime $end = null)
     {
         if ($start === null || $end === null) {
             return;
-        } elseif ($start >= $end) {
-            throw new \InvalidArgumentException('Start date is greater or equal to end date');
         }
-        
+
+        if ($start >= $end) {
+            throw new InvalidArgumentException('Start date is greater or equal to end date');
+        }
+
         $this->dateFrom = $start;
         $this->dateTo   = $end;
     }
 
-    /**
-     * Gets the start date.
-     *
-     * @return \DateTime
-     */
-    public function getDateFrom()
+    public function getDateFrom() : DateTime
     {
         return $this->dateFrom;
     }
 
-    /**
-     * Gets the end date.
-     *
-     * @return \DateTime
-     */
-    public function getDateTo()
+    public function getDateTo() : DateTime
     {
         return $this->dateTo;
     }
@@ -77,10 +61,8 @@ class DateRange implements JsonSerializable
      * Formats date range to string using given $format
      * 
      * @param string $f Any format accepted by php date()
-     * 
-     * @return string
      */
-    public function format($f = 'c')
+    public function format(string $f = 'c') : string
     {
         if ($this->isEmpty()) {
             return '';
@@ -101,10 +83,8 @@ class DateRange implements JsonSerializable
 
     /**
      * Returns duration of the date range in seconds.
-     * 
-     * @return int
      */
-    public function getDurationInSeconds()
+    public function getDurationInSeconds() : float|int
     {
         if (!$this->dateFrom) {
             return 0;
@@ -139,10 +119,8 @@ class DateRange implements JsonSerializable
 
     /**
      * Implement json serializable interface.
-     * 
-     * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }
@@ -150,10 +128,8 @@ class DateRange implements JsonSerializable
     /**
      * Returns a boolean TRUE if the range instance is
      * literally empty, FALSE otherwise.
-     * 
-     * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty() : bool
     {
         return !$this->dateFrom || !$this->dateTo;
     }

@@ -1,15 +1,17 @@
 <?php
 /**
  * Email address value object
- * 
+ *
  * @author  M. Yilmaz SUSLU <yilmazsuslu@gmail.com>
  * @license MIT
  *
  * @since   Sep 2016
  */
+
 namespace DDD\Embeddable;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
  * @ORM\Embeddable
@@ -17,57 +19,42 @@ use Doctrine\ORM\Mapping as ORM;
 class EmailAddress
 {
     /**
-     * email adress
-     * 
      * @ORM\Column(type="string", length=100, nullable=true)
-     * 
-     * @var string
      */
-    private $address;
+    private ?string $address = null;
 
-    /**
-     * Constructor.
-     * 
-     * @param string $email E-mail address
-     */
-    public function __construct($email = null)
+    public function __construct(string $email = null)
     {
-        // This is only a soft validation to reduce headaches in
-        // You SHOULD sanitize & validate email before using it as a value object!
-        if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('Given e-mail address '.$email.' is not a valid');
+        // This is only a soft validation to reduce headaches earlier.
+        // You SHOULD sanitize & validate actual email according to your needs, before using it as a value object!
+        if ($email && ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new InvalidArgumentException('Given e-mail address ' . $email . ' is not a valid');
         }
 
         $this->address = $email;
     }
 
     /**
-     * String representation of a email.
-     * 
-     * @return string
+     * String representation of an email.
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->address;
+        return $this->address ?: '';
     }
 
     /**
      * Returns domain part of the email address like gmail.com, yahoo.com etc.
-     * 
-     * @return string
      */
-    public function getDomain()
+    public function getDomain() : ?string
     {
         return $this->address ? explode('@', $this->address)[1] : null;
     }
 
     /**
      * Returns local part of the email address
-     * 
-     * @return string
      */
-    public function getLocalPart()
+    public function getLocalPart() : ?string
     {
-        return $this->address ? explode('@', $this->address)[0] : null;
+        return $this->address ? explode('@', $this->address, 2)[0] : null;
     }
 }
